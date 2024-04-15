@@ -1,7 +1,10 @@
 package tn.besoftilys.user.service;
 
-import tn.besoftilys.user.entity.User;
+import org.springframework.http.ResponseEntity;
+import tn.besoftilys.user.payload.request.LoginRequest;
+import tn.besoftilys.user.payload.request.SignupRequest;
 
 public interface IUser {
-    public void add(User user);
+    ResponseEntity<?> authenticateUser(LoginRequest loginRequest);
+    ResponseEntity<?> registerUser(SignupRequest signUpRequest);
 }

@@ -19,7 +19,11 @@ spring:
     password: password
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
+jwt:
+  app:
+    jwtExpirationMs: 86400000
+    jwtSecret: ======================ESBplatforme=Spring===========================

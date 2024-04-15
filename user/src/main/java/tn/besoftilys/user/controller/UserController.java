@@ -1,20 +1,28 @@
 package tn.besoftilys.user.controller;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import tn.besoftilys.user.entity.User;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import tn.besoftilys.user.payload.request.LoginRequest;
+import tn.besoftilys.user.payload.request.SignupRequest;
 import tn.besoftilys.user.service.IUser;
 
 @RestController
 @RequestMapping("/api/v1/users")
-@RequiredArgsConstructor
 public class UserController {
-    private final IUser iUser;
+    @Autowired
+    IUser iUser;
 
-    @PostMapping("/add")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void save (@RequestBody User user) {
-        iUser.add(user);
+    @PostMapping("/signin")
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
+        return iUser.authenticateUser(loginRequest);
+    }
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest){
+        return iUser.registerUser(signUpRequest);
     }
 }

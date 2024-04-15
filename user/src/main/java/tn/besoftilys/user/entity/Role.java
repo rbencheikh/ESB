@@ -3,22 +3,21 @@ package tn.besoftilys.user.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import tn.besoftilys.user.entity.Enum.ERole;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Entity
 @Builder
 @ToString
+@Entity
 @Table(name = "t_role")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+    Long id;
     @Enumerated(EnumType.STRING)
+    @Column(length = 20)
     ERole name;
 }
