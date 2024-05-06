@@ -16,7 +16,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2023.0.1</spring-cloud.version>
-		<camel.version>3.7.3</camel.version>
+		<camel.version>4.4.0</camel.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -24,17 +24,22 @@
 			<artifactId>camel-spring-boot-starter</artifactId>
 			<version>${camel.version}</version>
 		</dependency>
+
 		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-test</artifactId>
-			<scope>test</scope>
+			<groupId>org.apache.camel.springboot</groupId>
+			<artifactId>camel-micrometer-starter</artifactId>
 			<version>${camel.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-rabbitmq</artifactId>
+			<artifactId>camel-management</artifactId>
 			<version>${camel.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel.springboot</groupId>
+			<artifactId>camel-jsonpath-starter</artifactId>
 		</dependency>
 
 		<dependency>
@@ -67,16 +72,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-test-junit5</artifactId>
+			<artifactId>camel-kafka</artifactId>
 			<version>${camel.version}</version>
-			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-test-spring-junit5</artifactId>
+			<artifactId>camel-http</artifactId>
 			<version>${camel.version}</version>
-			<scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -131,8 +133,16 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.camel.springboot</groupId>
+				<artifactId>camel-spring-boot-bom</artifactId>
+				<version>${camel.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
 
 	<build>
 		<plugins>
