@@ -22,4 +22,12 @@ public class Message {
     Long messageSize;
     String contentType;
     String messageSource;
+    String messageBody;
+
+    public Message(Long messageSize, String contentType, String messageSource, String messageBody) {
+        this.messageSize=messageSize;
+        this.contentType=contentType;
+        this.messageSource=messageSource;
+        this.messageBody=messageBody;
+    }
 }
