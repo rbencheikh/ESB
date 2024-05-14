@@ -1,10 +1,10 @@
 package tn.besoftilys.messages.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.Date;
 
 @Getter
 @Setter
@@ -19,15 +19,15 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    Long messageSize;
+    int messageSize;
     String contentType;
-    String messageSource;
-    String messageBody;
+    String messageDestination;
+    Date comingDate;
 
-    public Message(Long messageSize, String contentType, String messageSource, String messageBody) {
-        this.messageSize=messageSize;
-        this.contentType=contentType;
-        this.messageSource=messageSource;
-        this.messageBody=messageBody;
+    public Message(int messageSize, String contentType, String messageDestination, Date comingDate) {
+        this.messageSize = messageSize;
+        this.contentType = contentType;
+        this.messageDestination = messageDestination;
+        this.comingDate = comingDate;
     }
 }
