@@ -12,6 +12,7 @@
         <module name="config-server" />
         <module name="discovery" />
         <module name="messages" />
+        <module name="transformation" />
         <module name="user" />
         <module name="gateway" />
       </profile>
@@ -25,6 +26,7 @@
       <module name="kafkaConsumerDemo" options="-parameters" />
       <module name="kafkaProducerDemo" options="-parameters" />
       <module name="messages" options="-parameters" />
+      <module name="transformation" options="-parameters" />
       <module name="user" options="-parameters" />
     </option>
   </component>

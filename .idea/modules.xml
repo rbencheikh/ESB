@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/MS-ESB.iml" filepath="$PROJECT_DIR$/.idea/MS-ESB.iml" />
-      <module fileurl="file://$PROJECT_DIR$/messages/messages.iml" filepath="$PROJECT_DIR$/messages/messages.iml" />
     </modules>
   </component>
 </project>

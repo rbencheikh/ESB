@@ -1,4 +1,5 @@
 package tn.besoftilys.messages.route;
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.kafka.KafkaConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,14 @@ public class StockKafkaRoute extends RouteBuilder {
     final String KAFKA_ENDPOINT = "kafka:%s?brokers=localhost:29092";
     final
     String KAFKA_ENDPOINT2="kafka:stock-message-2" + "?brokers=localhost:29092" + "&groupId=b725f72-3292-4cec-a55b-bb7cb80dcc44";
+    final String HTTP_ENDPOINT = "http://localhost:8092/api/messages";
     @Autowired
     IMessage iMessage;
     @Override
     public void configure() throws Exception {
         fromF(KAFKA_ENDPOINT, "stock-message")
                 .log(ERROR, "[${header.kafka.OFFSET}] [${body}]")
-                .throttle(3)
+                .throttle(3) //protect  from overloading
                 .process(exchange -> {
                     byte[] contentTypeBytes = exchange.getIn().getHeader("Content-Type", byte[].class);
                     String contentType = new String(contentTypeBytes, Charset.defaultCharset());
@@ -42,8 +44,11 @@ public class StockKafkaRoute extends RouteBuilder {
                     }
                     Date comingDate = new Date();
                     iMessage.saveMessage(new Message(messageSize, contentType, messageDestination, comingDate));
-                })
 
+                    exchange.getIn().setHeader(Exchange.CONTENT_TYPE, contentType);
+                    exchange.getIn().setBody(body);
+                })
+                .to(HTTP_ENDPOINT)
                 .toF(KAFKA_ENDPOINT2, "stock-message-2")
         ;
     }

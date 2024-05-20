@@ -27,3 +27,11 @@ jwt:
   app:
     jwtExpirationMs: 86400000
     jwtSecret: ======================ESBplatforme=Spring===========================
+
+management :
+  endpoints:
+    web:
+      exposure:
+        include:
+          - info
+          - health
