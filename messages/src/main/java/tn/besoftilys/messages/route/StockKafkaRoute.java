@@ -49,6 +49,11 @@ public class StockKafkaRoute extends RouteBuilder {
                     exchange.getIn().setBody(body);
                 })
                 .to(HTTP_ENDPOINT)
+                .process(exchange -> {
+                    // Get the transformed message from the HTTP response
+                    String transformedMessage = exchange.getIn().getBody(String.class);
+                    exchange.getIn().setBody(transformedMessage);
+                })
                 .toF(KAFKA_ENDPOINT2, "stock-message-2")
         ;
     }
