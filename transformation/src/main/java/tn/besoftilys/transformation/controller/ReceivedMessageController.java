@@ -18,7 +18,7 @@ public class ReceivedMessageController {
 @Autowired
     IReceivedMessage iReceivedMessage;
     @PostMapping
-    public ResponseEntity<String> receiveMessage(@RequestBody String body, @RequestHeader(HttpHeaders.CONTENT_TYPE) String contentType) {
+    public ResponseEntity<String> receiveMessage(@RequestBody String body, @RequestHeader(HttpHeaders.CONTENT_TYPE) String contentType) throws JsonProcessingException {
         // Print received headers and body
         System.out.println("Received Content-Type: " + contentType);
         System.out.println("Received Body: " + body);
@@ -28,29 +28,12 @@ public class ReceivedMessageController {
         messageDto.setContentType(contentType);
 
         // Transform the message
-        String transformedMessage = transformMessage(messageDto);
+        String transformedMessage = iReceivedMessage.transformMessage(messageDto);
 
 
         // Return a response
         return new ResponseEntity<>(transformedMessage, HttpStatus.OK);
     }
 
-
-    private String transformMessage(MessageDto messageDto) {
-        ObjectMapper jsonMapper = new ObjectMapper();
-        Object jsonObject;
-        try {
-            jsonObject = jsonMapper.readValue(messageDto.getBody(), Object.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        XmlMapper xmlMapper = new XmlMapper();
-        try {
-            String xmlString = xmlMapper.writeValueAsString(jsonObject);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        return xmlMapper.toString();
-    }
 
 }
