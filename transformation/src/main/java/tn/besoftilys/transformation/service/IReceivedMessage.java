@@ -6,6 +6,7 @@ import tn.besoftilys.transformation.dto.MessageDto;
 import java.util.Map;
 
 public interface IReceivedMessage {
-    String transformMessage(MessageDto messageDto) throws JsonProcessingException;
+
+    String transformMessage(MessageDto messageDto, String key)throws JsonProcessingException;
 
 }

@@ -19,7 +19,7 @@ public class StockKafkaRoute extends RouteBuilder {
     final String KAFKA_ENDPOINT = "kafka:%s?brokers=localhost:29092";
     final
     String KAFKA_ENDPOINT2="kafka:stock-message-2" + "?brokers=localhost:29092" + "&groupId=b725f72-3292-4cec-a55b-bb7cb80dcc44";
-    final String HTTP_ENDPOINT = "http://localhost:8092/api/messages";
+    final String HTTP_ENDPOINT = "http://localhost:8092/api/messages/process";
     @Autowired
     IMessage iMessage;
     @Override
@@ -38,6 +38,9 @@ public class StockKafkaRoute extends RouteBuilder {
                     if (body instanceof String) {
                         messageSize = ((String) body).length();
                         System.out.println("Message size: " + messageSize + " bytes");
+                    }else if (body instanceof byte[]) {
+                            messageSize = ((byte[]) body).length;
+                        System.out.println(messageSize);
                     } else {
                         // Handle non-String messages (e.g., byte arrays)
                         System.out.println("Message is not a String.");

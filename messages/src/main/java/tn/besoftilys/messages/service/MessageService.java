@@ -1,10 +1,15 @@
 package tn.besoftilys.messages.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.besoftilys.messages.entity.Message;
 import tn.besoftilys.messages.repository.MessageRepository;
 
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -31,4 +36,37 @@ public class MessageService implements IMessage{
 
         return counts;
     }
+
+    @Override
+    public String getContentType(String messageBody) {
+        messageBody = messageBody.trim(); // Remove leading/trailing whitespace
+
+        // Check for JSON structure (without parsing)
+        if (messageBody.startsWith("{") && messageBody.endsWith("}") &&
+                messageBody.indexOf(':') != -1 && messageBody.indexOf(',') != -1) {
+            return "application/json";
+        }
+
+        // Check for JavaScript function definition
+        if (messageBody.startsWith("(") && messageBody.endsWith(")") &&
+                (messageBody.contains("function ") || messageBody.matches("^[^\\s]*\\([^\\)]*\\)$"))) {
+            return "application/javascript";
+        }
+
+        // Check for HTML structure
+        if (messageBody.startsWith("<") && messageBody.endsWith(">") &&
+                messageBody.toLowerCase().contains("<html")) {
+            return "text/html";
+        }
+
+        // Check for XML structure (basic check)
+        if (messageBody.startsWith("<") && messageBody.endsWith(">")) {
+            return "application/xml";
+        }
+
+        // Default for unknown content type
+        return "text/plain";
+    }
+
+
 }

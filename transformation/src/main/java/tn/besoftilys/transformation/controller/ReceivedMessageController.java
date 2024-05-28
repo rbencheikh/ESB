@@ -17,8 +17,16 @@ import tn.besoftilys.transformation.service.IReceivedMessage;
 public class ReceivedMessageController {
 @Autowired
     IReceivedMessage iReceivedMessage;
-    @PostMapping
-    public ResponseEntity<String> receiveMessage(@RequestBody String body, @RequestHeader(HttpHeaders.CONTENT_TYPE) String contentType) throws JsonProcessingException {
+    private String receivedKey;
+    @PostMapping("/key")
+    public ResponseEntity<String> receiveKey(@RequestBody String key) {
+        System.out.println("Received Key: " + key);
+        // Store the key for later use
+        this.receivedKey = key;
+        return new ResponseEntity<>("Key received: " + key, HttpStatus.OK);
+    }
+    @PostMapping("/{process}")
+    public ResponseEntity<String> receiveMessage(@PathVariable String process,@RequestBody String body, @RequestHeader(HttpHeaders.CONTENT_TYPE) String contentType) throws JsonProcessingException {
         // Print received headers and body
         System.out.println("Received Content-Type: " + contentType);
         System.out.println("Received Body: " + body);
@@ -28,12 +36,22 @@ public class ReceivedMessageController {
         messageDto.setContentType(contentType);
 
         // Transform the message
-        String transformedMessage = iReceivedMessage.transformMessage(messageDto);
+        String transformedMessage = iReceivedMessage.transformMessage(messageDto,receivedKey);
 
 
         // Return a response
         return new ResponseEntity<>(transformedMessage, HttpStatus.OK);
     }
+
+//    @PostMapping("/{processFile}")
+//    public String processFile(@PathVariable String processFile , @RequestBody String fileContent) {
+//        // Process the file content here
+//        // Example processing: Convert content to uppercase
+//        String processedContent = fileContent.toUpperCase();
+//        System.out.println(processedContent);
+//        return processedContent;
+//    }
+
 
 
 }

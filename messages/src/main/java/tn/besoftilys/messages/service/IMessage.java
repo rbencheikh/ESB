@@ -7,4 +7,5 @@ import java.util.Map;
 public interface IMessage {
     Message saveMessage(Message message);
     Map<String, Long> countMessagesByContentType();
+    String getContentType(String messageBody);
 }
