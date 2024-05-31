@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import tn.besoftilys.transformation.dto.MessageDto;
 import tn.besoftilys.transformation.service.IReceivedMessage;
 
+import java.util.Set;
+
 
 @RestController
 @RequestMapping("/api/messages")
@@ -43,15 +45,21 @@ public class ReceivedMessageController {
         return new ResponseEntity<>(transformedMessage, HttpStatus.OK);
     }
 
-//    @PostMapping("/{processFile}")
-//    public String processFile(@PathVariable String processFile , @RequestBody String fileContent) {
-//        // Process the file content here
-//        // Example processing: Convert content to uppercase
-//        String processedContent = fileContent.toUpperCase();
-//        System.out.println(processedContent);
-//        return processedContent;
-//    }
 
+    @PostMapping("/processFile")
+    public ResponseEntity<String> processFile(@RequestBody String fileBody, @RequestHeader("Content-Type") String contentType) throws Exception {
+        // Log received headers and body
+        System.out.println("Received Content-Type: " + contentType);
+        System.out.println("Received File Body: " + fileBody);
+
+        // Process the file body and content type
+       Set<String> processedContent= iReceivedMessage.processData(fileBody,contentType);
+
+        // Log the processed content
+        System.out.println("Processed File Body: " + processedContent);
+
+        return ResponseEntity.ok(processedContent.toString());
+    }
 
 
 }

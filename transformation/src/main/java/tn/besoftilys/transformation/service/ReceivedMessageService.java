@@ -9,8 +9,10 @@ import org.json.XML;
 import org.springframework.stereotype.Service;
 import tn.besoftilys.transformation.dto.MessageDto;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 
 @Service
@@ -69,6 +71,7 @@ public class ReceivedMessageService implements IReceivedMessage {
         // If contentType or key doesn't match expected values, return the body as is
         return body;
     }
+
     private String processNode(JsonNode node) {
         StringBuilder result = new StringBuilder();
 
@@ -90,5 +93,54 @@ public class ReceivedMessageService implements IReceivedMessage {
         }
 
         return result.toString();
+    }
+
+    @Override
+    public Set<String> processData(String data, String contentType)throws Exception {
+        // Create an ObjectMapper instance for JSON processing
+        ObjectMapper jsonMapper = new ObjectMapper();
+
+        // Create an XmlMapper instance for XML processing
+        XmlMapper xmlMapper = new XmlMapper();
+
+        // Parse the input data into a JsonNode tree
+        JsonNode rootNode;
+        if (contentType.contains("json")) {
+            rootNode = jsonMapper.readTree(data);
+        } else if (contentType.contains("xml")) {
+            rootNode = xmlMapper.readTree(data.getBytes());
+        } else {
+            throw new IllegalArgumentException("Unsupported content type: " + contentType);
+        }
+
+        // Create a set to store unique values
+        Set<String> uniqueValues = new HashSet<>();
+
+        // Process the root node and store values in the set
+        traverseNode(rootNode, uniqueValues);
+
+        // Return the set of unique values
+        return uniqueValues;
+    }
+    private void traverseNode(JsonNode node, Set<String> uniqueValues) {
+        if (node.isValueNode()) {
+            // If the node is a value node (textual, numeric, boolean, etc.), add its value to the set
+            uniqueValues.add(node.asText());
+        } else if (node.isObject() || node.isArray()) {
+            // If the node is an object or an array, iterate over its fields or elements
+            Iterator<Map.Entry<String, JsonNode>> fields = node.fields();
+            while (fields.hasNext()) {
+                Map.Entry<String, JsonNode> entry = fields.next();
+                String key = entry.getKey();
+                uniqueValues.add(key);  // Add the key to the set
+                JsonNode value = entry.getValue();
+                traverseNode(value, uniqueValues);
+            }
+            Iterator<JsonNode> elements = node.elements();
+            while (elements.hasNext()) {
+                JsonNode element = elements.next();
+                traverseNode(element, uniqueValues);
+            }
+        }
     }
 }

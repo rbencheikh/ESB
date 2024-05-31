@@ -15,7 +15,8 @@ public class FileMoveRoute extends RouteBuilder {
     IMessage iMessage;
     @Override
     public void configure() throws Exception {
-        from("file:///C://Users//rbencheikh//Desktop//Input")
+        from("file:///C://Users//rabie//OneDrive//Bureau//Input")
+
                 .process(exchange -> {
                     // Get content type
                     String contentType = iMessage.getContentType(exchange.getIn().getBody(String.class));
@@ -35,8 +36,25 @@ public class FileMoveRoute extends RouteBuilder {
                 })
                 .log("${headers}")
                 .log("${body}")
+                .process(exchange -> {
+                    // Prepare the body for the HTTP request
+                    String contentType = exchange.getIn().getHeader(Exchange.CONTENT_TYPE, String.class);
+                    String fileBody = exchange.getIn().getBody(String.class);
+
+                    exchange.getMessage().setHeader(Exchange.CONTENT_TYPE, contentType);
+                    exchange.getMessage().setBody(fileBody);
+                })
+                .log("Sending file to the microservice for processing")
                 .to(HTTP_ENDPOINT)
-                .to("file:///C://Users//rbencheikh//Desktop//Output");
+                .process(exchange -> {
+                    // Process the response from the microservice
+                    String responseBody = exchange.getIn().getBody(String.class);
+                    System.out.println("Response from microservice: " + responseBody);
+
+                    // Update the message body with the response from the microservice if needed
+                    exchange.getMessage().setBody(responseBody);
+                })
+                .to("file:///C://Users//rabie//OneDrive//Bureau//Output");
     }
 
 }
