@@ -15,7 +15,7 @@ public class FileMoveRoute extends RouteBuilder {
     IMessage iMessage;
     @Override
     public void configure() throws Exception {
-        from("file:///C://Users//rabie//OneDrive//Bureau//Input")
+        from("file:///C://Users//rbencheikh//Desktop//Input")
 
                 .process(exchange -> {
                     // Get content type
@@ -54,7 +54,7 @@ public class FileMoveRoute extends RouteBuilder {
                     // Update the message body with the response from the microservice if needed
                     exchange.getMessage().setBody(responseBody);
                 })
-                .to("file:///C://Users//rabie//OneDrive//Bureau//Output");
+                .to("file:///C://Users//rbencheikh//Desktop//Output");
     }
 
 }

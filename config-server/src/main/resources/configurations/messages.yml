@@ -29,3 +29,4 @@ management :
         include:
           - info
           - health
+          - prometheus

@@ -12,7 +12,13 @@
         <option value="$PROJECT_DIR$/kafkaProducerDemo/pom.xml" />
         <option value="$PROJECT_DIR$/kafkaConsumerDemo/pom.xml" />
         <option value="$PROJECT_DIR$/transformation/pom.xml" />
+        <option value="$PROJECT_DIR$/appDemo1/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/appDemo1/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="graalvm-jdk-17" project-jdk-type="JavaSDK">

@@ -2,6 +2,7 @@ package tn.besoftilys.transformation.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -13,13 +14,19 @@ import java.util.Set;
 @RequestMapping
 public class JsonProcessingController {
 
-    @PostMapping("/process")
-    public Set<String> processJson(@RequestBody String jsonString) throws Exception {
-        // Create an ObjectMapper instance for JSON processing
-        ObjectMapper mapper = new ObjectMapper();
+    @PostMapping(value = "/process", consumes = {"application/json", "application/xml"})
+    public Set<String> processData(@RequestBody String data, @RequestHeader("Content-Type") String contentType) throws Exception {
+        ObjectMapper mapper;
 
-        // Parse the JSON string into a JsonNode tree
-        JsonNode rootNode = mapper.readTree(jsonString);
+        // Determine the appropriate mapper based on the content type
+        if (contentType.equals("application/xml")) {
+            mapper = new XmlMapper();
+        } else {
+            mapper = new ObjectMapper();
+        }
+
+        // Parse the input data into a JsonNode tree
+        JsonNode rootNode = mapper.readTree(data);
 
         // Create a set to store unique values
         Set<String> uniqueValues = new HashSet<>();
