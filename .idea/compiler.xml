@@ -9,12 +9,15 @@
         <outputRelativeToContentRoot value="true" />
         <module name="kafkaProducerDemo" />
         <module name="kafkaConsumerDemo" />
+        <module name="appDemo_2" />
         <module name="config-server" />
+        <module name="appDemo_1" />
         <module name="discovery" />
         <module name="messages" />
         <module name="transformation" />
         <module name="user" />
         <module name="gateway" />
+        <module name="appDemo_3" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -24,6 +27,9 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="appDemo1" options="-parameters" />
+      <module name="appDemo_1" options="-parameters" />
+      <module name="appDemo_2" options="-parameters" />
+      <module name="appDemo_3" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="discovery" options="-parameters" />
       <module name="gateway" options="-parameters" />

@@ -50,6 +50,8 @@ public class StockKafkaRoute extends RouteBuilder {
 
                     exchange.getIn().setHeader(Exchange.CONTENT_TYPE, contentType);
                     exchange.getIn().setBody(body);
+                    exchange.getIn().setHeader("messageDestination", messageDestination);
+
                 })
                 .to(HTTP_ENDPOINT)
                 .process(exchange -> {
@@ -58,6 +60,7 @@ public class StockKafkaRoute extends RouteBuilder {
                     exchange.getIn().setBody(transformedMessage);
                 })
                 .toF(KAFKA_ENDPOINT2, "stock-message-2")
+
         ;
     }
 
