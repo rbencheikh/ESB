@@ -2,6 +2,8 @@ package tn.besoftilys.messages.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tn.besoftilys.messages.entity.Message;
 import tn.besoftilys.messages.repository.MessageRepository;
@@ -68,5 +70,18 @@ public class MessageService implements IMessage{
         return "text/plain";
     }
 
+    @Override
+    public ResponseEntity<List<Message>> getAllMessages() {
+        try{
+            List<Message> messages = messageRepository.findAll();
+            if (messages.isEmpty()){
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }else {
+                return new ResponseEntity<>(messages,HttpStatus.OK);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
 }

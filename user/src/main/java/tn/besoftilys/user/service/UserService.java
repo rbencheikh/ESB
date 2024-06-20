@@ -1,5 +1,6 @@
 package tn.besoftilys.user.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tn.besoftilys.user.entity.ERole;
@@ -108,5 +109,30 @@ public class UserService implements IUser{
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+
+    @Override
+    public ResponseEntity<List<User>> getAllUsers() {
+        try{
+            List<User> users = userRepository.findAll();
+            if (users.isEmpty()){
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }else {
+                return new ResponseEntity<>(users,HttpStatus.OK);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Override
+    public ResponseEntity<HttpStatus> deleteUser(Long id) {
+        try {
+            userRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
 }

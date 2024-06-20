@@ -17,3 +17,11 @@ spring:
           uri: http://localhost:8090
           predicates:
             - Path=/api/v1/users/**
+        - id: messages
+          uri: http://localhost:8091
+          predicates:
+            - Path=/messages/**
+        - id: transformation
+          uri: http://localhost:8091
+          predicates:
+            - Path=/api/messages/**

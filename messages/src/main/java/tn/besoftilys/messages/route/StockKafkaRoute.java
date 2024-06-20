@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import tn.besoftilys.messages.entity.Message;
 import tn.besoftilys.messages.service.IMessage;
 
-
 import java.nio.charset.Charset;
 import java.util.Date;
 
