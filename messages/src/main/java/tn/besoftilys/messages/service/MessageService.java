@@ -12,10 +12,8 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MessageService implements IMessage{
@@ -83,5 +81,12 @@ public class MessageService implements IMessage{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @Override
+    public ResponseEntity<?> countAllMessages() {
+       long counter = messageRepository.count();
+       return new ResponseEntity<>(counter,HttpStatus.OK);
+    }
+
 
 }

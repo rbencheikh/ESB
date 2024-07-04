@@ -7,7 +7,7 @@ public class MessageDTO {
     private String messageDestination;
     private int messageSize;
     private String body;
-    private String transformedMessage; // New field
+    private String transformedMessage;
     private Date comingDate;
 
     public MessageDTO(String contentType, String messageDestination, int messageSize, String body, Date comingDate) {
