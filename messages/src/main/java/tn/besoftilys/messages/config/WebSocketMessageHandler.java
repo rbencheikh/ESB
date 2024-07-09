@@ -13,8 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 @Component
 public class WebSocketMessageHandler extends TextWebSocketHandler {
-    private static final Set<WebSocketSession> sessions = Collections.synchronizedSet(new HashSet<>());
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final Set<WebSocketSession> sessions = Collections.synchronizedSet(new HashSet<>());
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -22,27 +21,21 @@ public class WebSocketMessageHandler extends TextWebSocketHandler {
     }
 
     @Override
-    public void handleTextMessage(WebSocketSession session, TextMessage message) {
-        // Handle incoming messages if needed
-    }
-
-    @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         sessions.remove(session);
     }
 
-    public void broadcastMessage(Object message) {
+    @Override
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        // Handle received message if necessary
+    }
+
+    public void broadcastMessage(String message) {
+        TextMessage textMessage = new TextMessage(message);
         synchronized (sessions) {
-            String messageJson;
-            try {
-                messageJson = objectMapper.writeValueAsString(message);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
             for (WebSocketSession session : sessions) {
                 try {
-                    session.sendMessage(new TextMessage(messageJson));
+                    session.sendMessage(textMessage);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -50,11 +43,12 @@ public class WebSocketMessageHandler extends TextWebSocketHandler {
         }
     }
 
-    public void broadcastTransformedMessage(String transformedMessage) {
+    public void broadcastTransformedMessage(String message) {
+        TextMessage textMessage = new TextMessage("Transformed:" + message);
         synchronized (sessions) {
             for (WebSocketSession session : sessions) {
                 try {
-                    session.sendMessage(new TextMessage(transformedMessage));
+                    session.sendMessage(textMessage);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

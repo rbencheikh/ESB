@@ -18,10 +18,10 @@ import java.util.Set;
 @Service
 public class ReceivedMessageService implements IReceivedMessage {
     private final ObjectMapper objectMapper;
+
     public ReceivedMessageService(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
-
 
     @Override
     public String transformMessage(MessageDto messageDto, String key) throws JsonProcessingException {
@@ -42,7 +42,7 @@ public class ReceivedMessageService implements IReceivedMessage {
                 // Convert JSON to XML
                 JSONObject jsonObject = new JSONObject(jsonNode.toString());
                 return XML.toString(jsonObject);
-            }else if (key.equalsIgnoreCase("text")) {
+            } else if (key.equalsIgnoreCase("text")) {
                 // Convert JSON to text
                 return processNode(jsonNode);
             }
@@ -56,9 +56,9 @@ public class ReceivedMessageService implements IReceivedMessage {
 
                 // Check the target format specified by 'key'
                 if (key.equalsIgnoreCase("json")) {
-                    // Convert XML to JSON string
-                    return objectMapper.writeValueAsString(jsonNode);
-                }else if (key.equalsIgnoreCase("text")) {
+                    // Convert XML to formatted JSON string
+                    return formatJson(jsonNode);
+                } else if (key.equalsIgnoreCase("text")) {
                     // Convert XML to text
                     return processNode(jsonNode);
                 }
@@ -95,8 +95,14 @@ public class ReceivedMessageService implements IReceivedMessage {
         return result.toString();
     }
 
+    private String formatJson(JsonNode node) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Object json = mapper.treeToValue(node, Object.class);
+        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+    }
+
     @Override
-    public Set<String> processData(String data, String contentType)throws Exception {
+    public Set<String> processData(String data, String contentType) throws Exception {
         // Create an ObjectMapper instance for JSON processing
         ObjectMapper jsonMapper = new ObjectMapper();
 
@@ -122,6 +128,7 @@ public class ReceivedMessageService implements IReceivedMessage {
         // Return the set of unique values
         return uniqueValues;
     }
+
     private void traverseNode(JsonNode node, Set<String> uniqueValues) {
         if (node.isValueNode()) {
             // If the node is a value node (textual, numeric, boolean, etc.), add its value to the set

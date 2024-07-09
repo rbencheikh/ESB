@@ -62,7 +62,7 @@ public class StockKafkaRoute extends RouteBuilder {
                     MessageDTO messageDTO = new MessageDTO(contentType, messageDestination, messageSize, bodyString, comingDate);
 
                     // Broadcast the message via WebSocket
-                    webSocketMessageHandler.broadcastMessage(messageDTO);
+                    webSocketMessageHandler.broadcastMessage(messageDTO.getBody());
 
                 })
                 .to(HTTP_ENDPOINT)
@@ -74,9 +74,7 @@ public class StockKafkaRoute extends RouteBuilder {
 
                     webSocketMessageHandler.broadcastTransformedMessage(transformedMessage);
                 })
-                .toF(KAFKA_ENDPOINT2, "stock-message-2")
-
-        ;
+                .toF(KAFKA_ENDPOINT2, "stock-message-2");
     }
 
 }
