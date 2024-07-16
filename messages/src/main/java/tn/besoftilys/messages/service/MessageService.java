@@ -1,24 +1,26 @@
 package tn.besoftilys.messages.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import tn.besoftilys.messages.entity.Message;
 import tn.besoftilys.messages.repository.MessageRepository;
-
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
+import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class MessageService implements IMessage{
     @Autowired
     MessageRepository messageRepository;
+
+    private static final String UPLOAD_DIR = "C:/Users/rbencheikh/Desktop/Output";
+
     @Override
     public Message saveMessage(Message message) {
        return messageRepository.save(message);
@@ -88,5 +90,55 @@ public class MessageService implements IMessage{
        return new ResponseEntity<>(counter,HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<Object> uploadFile(MultipartFile file, String uploadDir) {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("File is empty");
+        }
+
+        try {
+            // Create the upload directory if it doesn't exist
+            File uploadDirectory = new File(uploadDir);
+            if (!uploadDirectory.exists()) {
+                uploadDirectory.mkdirs();
+            }
+
+            // Save the file to the upload directory
+            Path filePath = Paths.get(uploadDir, file.getOriginalFilename());
+            Files.write(filePath, file.getBytes());
+
+            return ResponseEntity.ok("File uploaded successfully: " + filePath.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("File upload failed: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public ResponseEntity<Object> uploadFile1(MultipartFile file) {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("File is empty");
+        }
+
+        try {
+            // Create the upload directory if it doesn't exist
+            File uploadDir = new File(UPLOAD_DIR);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+
+            // Save the file to the upload directory
+            Path filePath = Paths.get(UPLOAD_DIR, file.getOriginalFilename());
+            Files.write(filePath, file.getBytes());
+
+            return ResponseEntity.ok("File uploaded successfully: " + filePath.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("File upload failed: " + e.getMessage());
+        }
+    }
 
 }
+

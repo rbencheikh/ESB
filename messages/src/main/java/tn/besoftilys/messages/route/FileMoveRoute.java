@@ -53,8 +53,8 @@ public class FileMoveRoute extends RouteBuilder {
 
                     // Update the message body with the response from the microservice if needed
                     exchange.getMessage().setBody(responseBody);
-                })
-                .to("file:///C://Users//rbencheikh//Desktop//Output");
+                });
+               // .to("file:///C://Users//rbencheikh//Desktop//Output");
     }
 
 }

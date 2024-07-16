@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import tn.besoftilys.transformation.dto.MessageDto;
 import tn.besoftilys.transformation.service.IReceivedMessage;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,6 +22,7 @@ public class ReceivedMessageController {
     private List<String> receivedKeys1;
     private List<String> receivedKeys2;
     private List<String> receivedKeys3;
+    private final Set<String> processedContent = new HashSet<>();
 
     @PostMapping("/keys1")
     public ResponseEntity<String> receiveKeys1(@RequestBody List<String> keys) {
@@ -92,7 +94,13 @@ public class ReceivedMessageController {
         System.out.println("Received File Body: " + fileBody);
 
         // Process the file body and content type
-       Set<String> processedContent= iReceivedMessage.processData(fileBody,contentType);
+       Set<String> newContent = iReceivedMessage.processData(fileBody,contentType);
+
+        // Update the shared processedContent
+        synchronized (processedContent) {
+            processedContent.clear();
+            processedContent.addAll(newContent);
+        }
 
         // Log the processed content
         System.out.println("Processed File Body: " + processedContent);
@@ -100,5 +108,11 @@ public class ReceivedMessageController {
         return ResponseEntity.ok(processedContent.toString());
     }
 
+    @GetMapping("/getElements")
+    public ResponseEntity<Set<String>> getElements() {
+        synchronized (processedContent) {
+            return ResponseEntity.ok(new HashSet<>(processedContent));
+        }
+    }
 
 }
