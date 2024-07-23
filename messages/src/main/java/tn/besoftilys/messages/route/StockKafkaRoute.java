@@ -17,7 +17,7 @@ import static org.apache.camel.LoggingLevel.ERROR;
 
 @Component
 public class StockKafkaRoute extends RouteBuilder {
-    final String KAFKA_ENDPOINT = "kafka:%s?brokers=localhost:29092";
+    final String KAFKA_ENDPOINT = "kafka:%s?brokers=localhost:29092" + "&groupId=760bf933-5b8c-47b0-bd30-48151cae99e7";
     final
     String KAFKA_ENDPOINT2="kafka:stock-message-2" + "?brokers=localhost:29092" + "&groupId=b725f72-3292-4cec-a55b-bb7cb80dcc44";
     final String HTTP_ENDPOINT = "http://localhost:8092/api/messages/process";
