@@ -2,6 +2,7 @@ package tn.besoftilys.messages.route;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.http.base.HttpOperationFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tn.besoftilys.messages.entity.Message;
@@ -15,6 +16,14 @@ public class FileMoveRoute extends RouteBuilder {
     IMessage iMessage;
     @Override
     public void configure() throws Exception {
+        // Global error handling
+        onException(HttpOperationFailedException.class)
+                .maximumRedeliveries(3)
+                .redeliveryDelay(2000)
+                .handled(true)
+                .log("Error occurred: ${exception.message}")
+                .to("file://C://Users//rbencheikh//Desktop//Error");
+
         from("file:///C://Users//rbencheikh//Desktop//Input")
 
                 .process(exchange -> {

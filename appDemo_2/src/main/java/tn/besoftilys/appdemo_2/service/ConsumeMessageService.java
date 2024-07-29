@@ -29,6 +29,8 @@ public class ConsumeMessageService {
         props.put("group.id", groupId);
         props.put("key.deserializer", StringDeserializer.class.getName());
         props.put("value.deserializer", StringDeserializer.class.getName());
+        props.put("session.timeout.ms", "3600000");
+        props.put("request.timeout.ms", "3600000");
 
         this.consumer = new KafkaConsumer<>(props);
         this.desiredKeys = new HashSet<>(desiredKeys);
